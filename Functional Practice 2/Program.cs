@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 public static class Extensions
 {
@@ -49,7 +50,11 @@ public class Program
     // ----------------------------
     public static List<T> filter<T>(IEnumerable<T> coll, Func<T, bool> fn)
     {
-        reduce<T, int>(coll, fn);
+        return (
+            reduce<T, T> (coll, 
+                (accumulator, t) =>
+                (fn(t)) ? accumulator.Concat(new T[] { t }) :  accumulator)
+            );
     }
 
     //// PART III
